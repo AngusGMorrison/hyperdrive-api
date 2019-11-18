@@ -1,9 +1,5 @@
 class ApplicationController < ActionController::API
 
-  private def issue_token(payload)
-    JWT.encode(payload, secret)
-  end
-
   private def get_current_user
     begin
       user_id = decode_token['user_id']
@@ -11,6 +7,10 @@ class ApplicationController < ActionController::API
     rescue StandardError
       raise HyperdriveErrors::UnauthorizedUser
     end
+  end
+
+  private def issue_token(payload)
+    JWT.encode(payload, secret)
   end
 
   private def decode_token

@@ -1,5 +1,12 @@
 class ApplicationController < ActionController::API
 
+  rescue_from HyperdriveErrors::UnauthorizedUser { respond_to_error(error) }
+
+  private def respond_to_error(error)
+    render json: { errors: error.message }, status: error.status 
+  end
+
+
   private def get_current_user
     begin
       user_id = decode_token['user_id']

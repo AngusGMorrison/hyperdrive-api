@@ -10,7 +10,12 @@ class UserController < ApplicationController
   end
 
   def sign_in
-    current_user = get_current_user
+    @user = User.find_by(email: params[:user][:email])
+    if @user && @user.authenticate(params[:user][:password])
+      respond_with_user_and_token
+    else
+      render json: { errors: UserError::INCORRECT_LOGIN }, status: 400
+    end
   end
 
   private def user_params

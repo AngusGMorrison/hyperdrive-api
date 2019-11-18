@@ -1,4 +1,5 @@
 class UserController < ApplicationController
+  
   def sign_up
     @user = User.create(user_params)
     if @user.valid?

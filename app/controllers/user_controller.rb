@@ -10,6 +10,7 @@ class UserController < ApplicationController
   end
 
   def sign_in
+    current_user = get_current_user
   end
 
   private def user_params
@@ -17,7 +18,7 @@ class UserController < ApplicationController
   end
 
   private def respond_with_user_and_token
-    token = get_token({ user_id: @user.id })
+    token = issue_token({ user_id: @user.id })
     user_serializer = UserSerializer.create(user: @user)
     response = user_serializer.serialize_with_token_as_json(token)
     render json: response, status: 200

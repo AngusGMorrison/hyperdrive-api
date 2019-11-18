@@ -22,4 +22,4 @@
 /config/master.key
 
 # Ignore docker-compose
-/docker-compose
+/docker-compose.yml

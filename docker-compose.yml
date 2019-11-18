@@ -9,7 +9,7 @@ services:
       - "3000:3000"
     links:
       - postgres
-  postgres:
-    image: postgres:11.5
-    ports:
-      - "5432"
+  db:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data

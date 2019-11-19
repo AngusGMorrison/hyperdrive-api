@@ -20,9 +20,6 @@ class UserController < ApplicationController
 
   private def user_params
     params.require(:user).permit(:name, :email, :password)
-    rescue ActionController::ParameterMissing
-      raise HyperdriveError::ParameterMissing
-    end
   end
 
   private def respond_with_user_and_token

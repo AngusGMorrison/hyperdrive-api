@@ -1,8 +1,11 @@
 class ApplicationController < ActionController::API
 
-  rescue_from UserError::Unauthorized, with: :respond_to_error
+  rescue_from UserError::Unauthorized, with: :respond_to_hyperdrive_error
+  rescue_from ActionController::ParameterMissing do
+    render json: { errors: HyperdriveError::PARAMETER_MISSING }, status: 400
+  end
 
-  private def respond_to_error(error)
+  private def respond_to_hyperdrive_error(error)
     render json: { errors: error.message }, status: error.status 
   end
 

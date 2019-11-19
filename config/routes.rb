@@ -1,3 +1,4 @@
 Rails.application.routes.draw do
-  get "/sign-up", to: "users#sign_up"
+  post "/sign-up", to: "users#sign_up"
+  post "/sign-in", to: "users#sign_in"
 end

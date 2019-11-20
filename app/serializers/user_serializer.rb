@@ -1,7 +1,7 @@
 class UserSerializer < Serializer
 
-  def intitialize(user:)
-    super
+  def initialize(user:)
+    super()
     @user = user
   end
 
@@ -21,5 +21,6 @@ class UserSerializer < Serializer
       id: @user.id,
       name: @user.name
     }
+  end
 
 end

@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     if @user.valid?
       respond_with_user_and_token
     else
-      render json: { errors: user.errors }, status: 400
+      render json: { errors: @user.errors }, status: 400
     end
   end
 

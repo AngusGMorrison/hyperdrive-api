@@ -1,4 +1,6 @@
+.git
 log/*
 tmp/*
 Dockerfile
 README.md
+docker-compose.yml

@@ -10,6 +10,10 @@ class User < ApplicationRecord
     Folder.create(user_id: self.id, name: Folder::ROOT_NAME)
   end
 
+  def root_folder
+    self.folders.root
+  end
+
   validates :name, :email, :password, {
     presence: true
   }

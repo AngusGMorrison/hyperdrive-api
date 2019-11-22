@@ -13,6 +13,7 @@ class DriveController < ApplicationController
     @current_user = get_current_user
     folder = @current_user.root_folder
     folder.files.attach(params[:file])
+    render json: { message: "Success!" }, status: 200
   end
 
   def file_params

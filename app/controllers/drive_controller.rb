@@ -6,7 +6,7 @@ class DriveController < ApplicationController
   end
 
   private def respond_with_user_files
-    @files = @current_user.folders.root.files
+    @files = @current_user.root_folder.files
   end
 
 end

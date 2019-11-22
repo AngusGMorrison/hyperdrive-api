@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
 
   private def get_current_user
     begin
-      user_id = decode_token['user_id']
+      user_id = decode_token.first['user_id']
       User.find(user_id)
     rescue StandardError
       raise UserError::Unauthorized

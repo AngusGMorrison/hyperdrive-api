@@ -9,4 +9,15 @@ class DriveController < ApplicationController
     @files = @current_user.root_folder.files
   end
 
+  def create
+    @current_user = get_current_user
+    # Validate file
+    @current_user.root_folder.attach(params[:file])
+  end
+
+  def file_params
+    params.permit(:file)
+  end
+
+
 end

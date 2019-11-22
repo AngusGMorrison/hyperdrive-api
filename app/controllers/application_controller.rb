@@ -21,7 +21,7 @@ class ApplicationController < ActionController::API
   end
 
   private def decode_token
-    token = request.headers.token
+    token = request.headers["Authorization"]
     JWT.decode(token, secret)
   end
 

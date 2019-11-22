@@ -6,8 +6,7 @@ class DriveController < ApplicationController
   end
 
   private def respond_with_user_files
-    folder = Folder.where(["user_id = ? AND name = ?", @current_user.id, Folder::ROOT_NAME])
-    @files = @current_user.folder
+    @files = @current_user.folders.root.files
   end
 
 end

@@ -5,4 +5,6 @@ class Folder < ApplicationRecord
   scope :root, -> { where(name: ROOT_NAME)}
 
   belongs_to :user
+  has_many_attached :files
+  
 end

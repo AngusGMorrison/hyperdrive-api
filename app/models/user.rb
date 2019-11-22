@@ -1,5 +1,8 @@
 class User < ApplicationRecord
+
   has_secure_password
+  
+  after_create Folder.create(user: self, name: '__root__')
 
   validates :name, :email, :password, {
     presence: true

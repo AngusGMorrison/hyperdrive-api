@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   post "/sign-in", to: "users#sign_in"
 
   get "/drive", to: "drive#show"
+  post "/drive", to: "drive#create"
 end

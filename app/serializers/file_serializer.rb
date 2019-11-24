@@ -18,7 +18,7 @@ class FileSerializer < Serializer
       id: file.id,
       filename: file.filename,
       content_type: file.content_type,
-      extension: Folder.get_file_extension(file),
+      # extension: Folder.get_file_extension(file),
       byte_size: file.byte_size,
       download_url: rails_blob_url(file, disposition: 'attachment'),
       created_at: file.created_at

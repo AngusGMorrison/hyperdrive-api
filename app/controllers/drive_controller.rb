@@ -8,7 +8,7 @@ class DriveController < ApplicationController
   private def respond_with_user_files
     files = @current_user.root_folder.files
     user_serializer = UserSerializer.new(user: @current_user)
-    response_body = UserSerializer.serialize_with_files_as_json(files)
+    response_body = user_serializer.serialize_with_files_as_json(files)
     render json: response_body, status: 200
   end
 

@@ -18,9 +18,9 @@ class FileSerializer < Serializer
       id: file.id,
       filename: file.filename,
       content_type: file.content_type,
-      # extension: Folder.get_file_extension(file),
+      extension: Folder.get_file_extension(file),
       byte_size: file.byte_size,
-      created_at: file.created_at
+      created_at: Folder.format_file_date(file.created_at)
     }
   end
 

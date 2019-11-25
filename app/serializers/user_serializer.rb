@@ -23,7 +23,7 @@ class UserSerializer < Serializer
   def serialize_with_files(files)
     serialized_user = { user: serialize }
     file_serializer = FileSerializer.new(files: files)
-    serialized_user[:user][:files] = file_serializer.serialize()
+    serialized_user[:files] = file_serializer.serialize()
     serialized_user
   end
 

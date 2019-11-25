@@ -37,7 +37,10 @@ class DriveController < ApplicationController
 
   private def find_file
     begin
-      @current_user.files.find(params[:file_id])
+      folder = Folder.where(user: @current_user).with_attached_files
+      p folder.
+      return nil
+      # @current_user.with_attached_files.find(params[:file_id])
     rescue ActiveRecord::RecordNotFound
       raise DriveError::FileNotFound
     end

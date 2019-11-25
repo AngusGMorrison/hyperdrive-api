@@ -4,6 +4,8 @@ class Folder < ApplicationRecord
   scope :root, -> { find_by(name: ROOT)}
 
   belongs_to :user
+  has_many :documents
+
   has_many_attached :files
 
   def self.get_file_extension(file)

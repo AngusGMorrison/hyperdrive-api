@@ -1,5 +1,7 @@
 class DriveController < ApplicationController
 
+  rescue_from DriveError::FileNotFound, with: :respond_to_error
+
   def show
     @current_user = get_current_user
     respond_with_user_files
@@ -24,6 +26,21 @@ class DriveController < ApplicationController
     file_serializer = FileSerializer.new(files: new_file)
     response_body = file_serializer.serialize_as_json()
     render json: response_body, status: 200
+  end
+
+  def delete_file
+    @current_user = get_current_user
+    file = find_file
+    file.purge
+    render status: 200
+  end
+
+  private def find_file
+    begin
+      @current_user.files.find(params[:file_id])
+    rescue ActiveRecord::RecordNotFound
+      raise DriveError::FileNotFound
+    end
   end
 
   def file_params

@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :folders
+  has_many :files, through: :folders
 
   after_create :create_root_folder
 

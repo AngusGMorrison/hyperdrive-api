@@ -17,8 +17,10 @@ class DriveController < ApplicationController
   def create
     @current_user = get_current_user
     @folder = @current_user.root_folder
-    @folder.files.attach(params[:file])
-    respond_with_new_file
+    @document = Document.create(folder: @folder, filename: params[:file].name, content_type: request.headers["Content-Type"], byte_size: params[:file].size)
+    p @document
+    # @folder.files.attach(params[:file])
+    # respond_with_new_file
   end
 
   private def respond_with_new_file

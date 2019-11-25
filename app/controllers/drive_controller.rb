@@ -14,9 +14,16 @@ class DriveController < ApplicationController
 
   def create
     @current_user = get_current_user
-    folder = @current_user.root_folder
-    folder.files.attach(params[:file])
-    render json: { message: "Success!" }, status: 200
+    @folder = @current_user.root_folder
+    @folder.files.attach(params[:file])
+    respond_with_new_file
+  end
+
+  private def respond_with_new_file
+    new_file = @folder.files.last
+    file_serializer = FileSerializer.new(files: new_file)
+    response_body = file_serializer.serialize_as_json()
+    render json: response_body, status: 200
   end
 
   def file_params

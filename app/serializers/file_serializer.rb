@@ -5,6 +5,10 @@ class FileSerializer < Serializer
     @files = files
   end
 
+  def serialize_as_json
+    { files: serialize }.to_json()
+  end
+
   def serialize
     if @files.respond_to?(:map)
       @files.map { |file| serialize_single_file(file) }

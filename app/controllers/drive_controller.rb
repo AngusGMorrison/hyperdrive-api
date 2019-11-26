@@ -42,7 +42,7 @@ class DriveController < ApplicationController
 
   private def find_document
     begin
-      Document.find(params[:file_id])
+      Document.find_by!(id: params[:file_id], user: @current_user)
     rescue ActiveRecord::RecordNotFound
       raise DriveError::DocumentNotFound
     end

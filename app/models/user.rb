@@ -15,6 +15,18 @@ class User < ApplicationRecord
     self.folders.root
   end
 
+  def bytes_stored
+    self.documents.sum { |document| document.byte_size}
+  end
+
+  def remaining_storage
+    self.storage_allowance - self.bytes_stored
+  end
+
+  def has_enough_storage?(bytes)
+    bytes <= self.remaining_storage
+  end
+
   validates :name, :email, :password, {
     presence: true
   }

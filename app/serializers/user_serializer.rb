@@ -16,14 +16,14 @@ class UserSerializer < Serializer
     }
   end
 
-  def serialize_with_files_as_json(files)
+  def serialize_with_documents_as_json(documents)
     serialize_with_files(files).to_json
   end
 
-  def serialize_with_files(files)
+  def serialize_with_documents(documents)
     serialized_user = { user: serialize }
-    file_serializer = FileSerializer.new(files: files)
-    serialized_user[:files] = file_serializer.serialize()
+    doc_serializer = DocumentSerializer.new(documents: documents)
+    serialized_user[:documents] = doc_serializer.serialize()
     serialized_user
   end
 

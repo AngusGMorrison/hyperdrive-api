@@ -8,9 +8,9 @@ class DriveController < ApplicationController
   end
 
   private def respond_with_user_files
-    files = @current_user.root_folder.files
+    documents = @current_user.root_folder.documents
     user_serializer = UserSerializer.new(user: @current_user)
-    response_body = user_serializer.serialize_with_files_as_json(files)
+    response_body = user_serializer.serialize_with_documents_as_json(documents)
     render json: response_body, status: 200
   end
 
@@ -28,24 +28,21 @@ class DriveController < ApplicationController
   end
 
   private def respond_with_new_file
-    file_serializer = FileSerializer.new(files: @document.file_data)
-    response_body = file_serializer.serialize_as_json()
+    doc_serializer = DocumentSerializer.new(documents: @document)
+    response_body = doc_serializer.serialize_as_json()
     render json: response_body, status: 200
   end
 
   def delete_file
-    @current_user = get_current_user
-    file = find_file
-    file.purge
+    current_user = get_current_user
+    document = find_document
+    document.destroy()
     render status: 200
   end
 
-  private def find_file
+  private def find_document
     begin
-      folder = Folder.where(user: @current_user).with_attached_files
-      p folder.
-      return nil
-      # @current_user.with_attached_files.find(params[:file_id])
+      Document.find_by!(id: params[:file_id], user: current_user)
     rescue ActiveRecord::RecordNotFound
       raise DriveError::FileNotFound
     end

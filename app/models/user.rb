@@ -19,12 +19,12 @@ class User < ApplicationRecord
     self.name.capitalize
   end
 
-  def bytes_stored
+  def storage_used_in_bytes
     self.documents.sum { |document| document.byte_size }
   end
 
-  def remaining_storage
-    self.storage_allowance - self.bytes_stored
+  def remaining_storage_in_bytes
+    self.storage_allowance - self.storage_used_in_bytes
   end
 
   def has_enough_storage?(bytes)

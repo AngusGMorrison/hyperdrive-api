@@ -17,7 +17,7 @@ class UserSerializer < Serializer
   end
 
   def serialize_with_documents_as_json(documents)
-    serialize_with_files(files).to_json
+    serialize_with_documents(documents).to_json
   end
 
   def serialize_with_documents(documents)

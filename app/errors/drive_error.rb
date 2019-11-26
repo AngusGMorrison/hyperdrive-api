@@ -1,6 +1,6 @@
 class DriveError < StandardError
 
-  class FileNotFound < DriveError
+  class DocumentNotFound < DriveError
     def message
       "File not found"
     end

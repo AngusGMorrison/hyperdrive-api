@@ -1,6 +1,6 @@
 class DriveController < ApplicationController
 
-  rescue_from DriveError::FileNotFound, with: :respond_to_error
+  rescue_from DriveError::DocumentNotFound, with: :respond_to_error
 
   def show
     @current_user = get_current_user
@@ -33,8 +33,8 @@ class DriveController < ApplicationController
     render json: response_body, status: 200
   end
 
-  def delete_file
-    current_user = get_current_user
+  def delete_document
+    @current_user = get_current_user
     document = find_document
     document.destroy()
     render status: 200
@@ -42,9 +42,9 @@ class DriveController < ApplicationController
 
   private def find_document
     begin
-      Document.find_by!(id: params[:file_id], user: current_user)
+      Document.find(params[:file_id])
     rescue ActiveRecord::RecordNotFound
-      raise DriveError::FileNotFound
+      raise DriveError::DocumentNotFound
     end
   end
 

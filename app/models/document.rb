@@ -7,7 +7,7 @@ class Document < ApplicationRecord
   validate :document_size
 
   private def document_size
-    if byte_size > user.remaining_storage
+    if byte_size > user.remaining_storage_in_bytes
       errors.add(:byte_size, "is greater than remaining storage")
     end
   end

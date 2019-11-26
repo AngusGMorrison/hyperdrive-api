@@ -16,7 +16,8 @@ class User < ApplicationRecord
   end
 
   def capitalized_name
-    self.name.capitalize
+    name_array = self.name.split(" ")
+    name_array.map(&:capitalize).join(" ")
   end
 
   def storage_used_in_bytes

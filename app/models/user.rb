@@ -16,7 +16,7 @@ class User < ApplicationRecord
   end
 
   def bytes_stored
-    self.documents.sum { |document| document.byte_size}
+    self.documents.sum { |document| document.byte_size }
   end
 
   def remaining_storage

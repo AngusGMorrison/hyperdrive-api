@@ -2,7 +2,7 @@ class Document < ApplicationRecord
   belongs_to :folder
   belongs_to :user
 
-  has_one_attached :file_data
+  has_one_attached :file_data, dependent: :purge
 
   def get_file_extension
     self.filename.to_s.match(/\..+\z/)[0]

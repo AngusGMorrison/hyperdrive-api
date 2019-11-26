@@ -31,7 +31,7 @@ class UserSerializer < Serializer
     {
       id: @user.id,
       name: @user.name,
-      remaining_storage: @user.remaining_storage
+      remaining_storage: @user.remaining_storage,
       storage_allowance: @user.storage_allowance
     }
   end

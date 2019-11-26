@@ -16,9 +16,9 @@ class DriveController < ApplicationController
 
   def create
     current_user = get_current_user
-    folder = current_user.root_folder
     @document = Document.create(
-      folder: folder,
+      user: current_user,
+      folder: current_user.root_folder,
       filename: params[:file].original_filename,
       content_type: params[:file].content_type,
       byte_size: params[:file].size

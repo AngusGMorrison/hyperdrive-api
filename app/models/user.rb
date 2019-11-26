@@ -15,6 +15,10 @@ class User < ApplicationRecord
     self.folders.root
   end
 
+  def capitalized_name
+    self.name.capitalize
+  end
+
   def bytes_stored
     self.documents.sum { |document| document.byte_size }
   end

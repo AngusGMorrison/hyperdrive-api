@@ -4,10 +4,10 @@ class DriveController < ApplicationController
 
   def show
     @current_user = get_current_user
-    respond_with_user_files
+    respond_with_all_documents
   end
 
-  private def respond_with_user_files
+  private def respond_with_all_documents
     documents = @current_user.root_folder.documents
     user_serializer = UserSerializer.new(user: @current_user)
     response_body = user_serializer.serialize_with_documents_as_json(documents)
@@ -15,10 +15,10 @@ class DriveController < ApplicationController
   end
 
   def create
-    current_user = get_current_user
+    @current_user = get_current_user
     @document = Document.create(
-      user_id: current_user.id,
-      folder: current_user.root_folder,
+      user_id: @current_user.id,
+      folder: @current_user.root_folder,
       filename: params[:file].original_filename,
       content_type: params[:file].content_type,
       byte_size: params[:file].size
@@ -35,9 +35,13 @@ class DriveController < ApplicationController
   end
 
   private def respond_with_document
-    doc_serializer = DocumentSerializer.new(documents: @document)
-    response_body = doc_serializer.serialize_as_json()
-    render json: response_body, status: 200
+    if @document.valid?
+      user_serializer = UserSerializer.new(user: @current_user)
+      response_body = user_serializer.serialize_with_documents_as_json(@document)
+      render json: response_body, status: 200
+    else
+      render json: { errors: @document.errors }, status: 400
+    end
   end
 
   def download_document

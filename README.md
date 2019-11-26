@@ -4,7 +4,7 @@
 
 The critical cyberpunk cloud storage drive you never knew you needed.
 
-*This project is a work in progress. Check back in a week to try it live on AWS Elastic Beanstalk.*
+*This project is a work in progress. Check back soon to try it live on AWS Elastic Beanstalk.*
 
 **Features:**
 * Accepts file uploads for storage in a folder-and-document filesystem private to each user
@@ -13,4 +13,4 @@ The critical cyberpunk cloud storage drive you never knew you needed.
 * Streams files to the front end for download
 * Full file CRUD
 * Variable per-user storage limits
-* Containerized with Docker
+* Containerized with Docker-Compose

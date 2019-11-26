@@ -17,32 +17,43 @@ class DriveController < ApplicationController
   def create
     current_user = get_current_user
     @document = Document.create(
-      user: current_user,
+      user_id: current_user.id,
       folder: current_user.root_folder,
       filename: params[:file].original_filename,
       content_type: params[:file].content_type,
       byte_size: params[:file].size
     )
     @document.file_data.attach(params[:file])
-    respond_with_new_file
+    respond_with_document
   end
 
-  private def respond_with_new_file
+  def delete_document
+    @current_user = get_current_user
+    @document = find_document
+    @document.destroy()
+    respond_with_document
+  end
+
+  private def respond_with_document
     doc_serializer = DocumentSerializer.new(documents: @document)
     response_body = doc_serializer.serialize_as_json()
     render json: response_body, status: 200
   end
 
-  def delete_document
+  def download_document
     @current_user = get_current_user
-    document = find_document
-    document.destroy()
-    render status: 200
+    @document = find_document
+    send_data(
+      @document.file_data.download,
+      filename: @document.filename,
+      disposition: 'attachment',
+      status: 200
+    );
   end
 
   private def find_document
     begin
-      Document.find_by!(id: params[:file_id], user: @current_user)
+      Document.find_by!(id: params[:document_id], user: @current_user)
     rescue ActiveRecord::RecordNotFound
       raise DriveError::DocumentNotFound
     end

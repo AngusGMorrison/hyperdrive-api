@@ -4,5 +4,6 @@ Rails.application.routes.draw do
 
   get "/drive", to: "drive#show"
   post "/drive", to: "drive#create"
-  delete "/drive", to: "drive#delete_document"
+  delete "/drive/:document_id", to: "drive#delete_document"
+  get "/drive/:document_id", to: "drive#download_document"
 end

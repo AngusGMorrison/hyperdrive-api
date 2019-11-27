@@ -12,5 +12,6 @@ The critical cyberpunk cloud storage drive you never knew you needed.
 * Stores uploaded files in a private AWS S3 bucket
 * Streams files to the front end for download
 * Full file CRUD
+* Custom serializers ensure only essential data is returned with each response
 * Variable per-user storage limits
 * Containerized with Docker-Compose

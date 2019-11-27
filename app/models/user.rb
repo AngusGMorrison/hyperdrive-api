@@ -1,5 +1,36 @@
 class User < ApplicationRecord
+
   has_secure_password
+
+  has_many :folders
+  has_many :documents
+
+  after_create :create_root_folder
+
+  private def create_root_folder
+    Folder.create(user_id: self.id, name: Folder::ROOT)
+  end
+
+  def root_folder
+    self.folders.root
+  end
+
+  def capitalized_name
+    name_array = self.name.split(" ")
+    name_array.map(&:capitalize).join(" ")
+  end
+
+  def storage_used_in_bytes
+    self.documents.sum { |document| document.byte_size }
+  end
+
+  def remaining_storage_in_bytes
+    self.storage_allowance - self.storage_used_in_bytes
+  end
+
+  def has_enough_storage?(bytes)
+    bytes <= self.remaining_storage
+  end
 
   validates :name, :email, :password, {
     presence: true

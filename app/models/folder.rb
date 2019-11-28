@@ -19,6 +19,7 @@ class Folder < ApplicationRecord
 
   validate :has_parent_unless_root
   validate :root_has_no_parent
+  validate :not_own_parent
 
   private def has_parent_unless_root
     unless level == Folder::LEVELS[:ROOT] || parent_folder
@@ -29,6 +30,12 @@ class Folder < ApplicationRecord
   private def root_has_no_parent
     if level == Folder::LEVELS[:ROOT] && parent_folder
       errors.add(:parent_folder, 'cannot be added to a root folder')
+    end
+  end
+
+  private def not_own_parent
+    if self == parent_folder
+      errors.add(:parent_folder, 'must be different to current folder')
     end
   end
 

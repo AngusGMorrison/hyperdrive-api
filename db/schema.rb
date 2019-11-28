@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_26_144731) do
+ActiveRecord::Schema.define(version: 2019_11_28_152225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,20 +40,24 @@ ActiveRecord::Schema.define(version: 2019_11_26_144731) do
     t.string "filename"
     t.string "content_type"
     t.integer "byte_size"
-    t.bigint "folder_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id"
-    t.index ["folder_id"], name: "index_documents_on_folder_id"
+    t.string "containing_folder_type"
+    t.bigint "containing_folder_id"
+    t.index ["containing_folder_type", "containing_folder_id"], name: "containing_folder_document_index"
     t.index ["user_id"], name: "index_documents_on_user_id"
   end
 
   create_table "folders", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_folders_on_user_id"
+    t.string "containing_folder_type"
+    t.bigint "containing_folder_id"
+    t.index ["containing_folder_type", "containing_folder_id"], name: "containing_folder_folder_index"
+  end
+
+  create_table "root_folders", force: :cascade do |t|
+    t.bigint "user_id_id"
+    t.index ["user_id_id"], name: "index_root_folders_on_user_id_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -66,6 +70,4 @@ ActiveRecord::Schema.define(version: 2019_11_26_144731) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "documents", "folders"
-  add_foreign_key "folders", "users"
 end

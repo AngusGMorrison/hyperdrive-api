@@ -43,21 +43,21 @@ ActiveRecord::Schema.define(version: 2019_11_28_152225) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id"
-    t.string "containing_folder_type"
-    t.bigint "containing_folder_id"
-    t.index ["containing_folder_type", "containing_folder_id"], name: "containing_folder_document_index"
+    t.string "parent_folder_type", null: false
+    t.bigint "parent_folder_id", null: false
+    t.index ["parent_folder_type", "parent_folder_id"], name: "index_parent_folder_on_document"
     t.index ["user_id"], name: "index_documents_on_user_id"
   end
 
   create_table "folders", force: :cascade do |t|
-    t.string "containing_folder_type"
-    t.bigint "containing_folder_id"
-    t.index ["containing_folder_type", "containing_folder_id"], name: "containing_folder_folder_index"
-  end
-
-  create_table "root_folders", force: :cascade do |t|
-    t.bigint "user_id"
-    t.index ["user_id"], name: "index_root_folders_on_user_id"
+    t.bigint "user_id", null: false
+    t.string "parent_folder_type"
+    t.bigint "parent_folder_id"
+    t.string "level", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["parent_folder_type", "parent_folder_id"], name: "index_parent_folder_on_folder"
+    t.index ["user_id"], name: "index_folders_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

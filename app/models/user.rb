@@ -3,14 +3,12 @@ class User < ApplicationRecord
   has_secure_password
 
   has_many :documents
-  has_one :root_folder
-  has_many :folders, through: :root_folder, source: :subfolders
-
+  has_many :folders
 
   after_create :create_root_folder
 
   private def create_root_folder
-    RootFolder.create(user: self)
+    Folder.create(user_id: self.id, level: Folder::LEVELS[:ROOT])
   end
 
   def capitalized_name

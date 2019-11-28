@@ -11,6 +11,10 @@ class User < ApplicationRecord
     Folder.create(user_id: self.id, level: Folder::LEVELS[:ROOT])
   end
 
+  def root_folder
+    self.folders.find_by(level: Folder::LEVELS[:ROOT])
+  end
+
   def capitalized_name
     name_array = self.name.split(" ")
     name_array.map(&:capitalize).join(" ")

@@ -10,16 +10,16 @@ class Folder < ApplicationRecord
   has_many :subfolders, class_name: :Folder, as: :parent_folder
   has_many :documents, as: :parent_folder
 
-  validates :level, {
-    uniqueness: {
-      scope: :user,
-      message: "User already has a root folder"
-    }
-  }
-
+  validate :user_has_only_one_root
   validate :has_parent_unless_root
   validate :root_has_no_parent
   validate :not_own_parent
+
+  private def user_has_only_one_root
+    if level == Folder::LEVELS[:ROOT] && user.root_folder
+      errors.add(:level, "User already has a root folder")
+    end
+  end
 
   private def has_parent_unless_root
     unless level == Folder::LEVELS[:ROOT] || parent_folder

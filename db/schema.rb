@@ -56,8 +56,8 @@ ActiveRecord::Schema.define(version: 2019_11_28_152225) do
   end
 
   create_table "root_folders", force: :cascade do |t|
-    t.bigint "user_id_id"
-    t.index ["user_id_id"], name: "index_root_folders_on_user_id_id"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_root_folders_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

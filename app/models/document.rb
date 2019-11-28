@@ -1,7 +1,7 @@
 class Document < ApplicationRecord
-  belongs_to :folder
-  belongs_to :user
 
+  belongs_to :user
+  belongs_to :containing_folder, polymorphic: true
   has_one_attached :file_data, dependent: :purge
 
   validate :document_size

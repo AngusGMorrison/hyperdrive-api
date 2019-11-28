@@ -1,9 +1,7 @@
 class Folder < ApplicationRecord
 
-  ROOT = '__root__'
-  scope :root, -> { find_by(name: ROOT)}
-
   belongs_to :user
-  has_many :documents
+  has_many :subfolders, class_name: :Folder, foreign_key: :containing_folder
+  has_many :documents, as: :containing_folder
 
 end

@@ -4,9 +4,10 @@ class DriveController < ApplicationController
   
   def show
     @current_user = get_current_user
-    folder = Folder.find_by(id: params[:folder_id], user_id: @current_user.id)
+    folder = find_folder
     user_serializer = UserSerializer.new(user: @current_user)
     response_body = user_serializer.serialize_with_folder_as_json(folder)
+    render json: response_body, status: 200
   end
 
   def create
@@ -33,7 +34,7 @@ class DriveController < ApplicationController
     if @document.valid?
       user_serializer = UserSerializer.new(user: @current_user)
       response_body = user_serializer.serialize_with_documents_as_json(@document)
-      render json: response_body, status: 200
+      render json: response_body, status: 201
     else
       render json: { errors: @document.errors }, status: 400
     end
@@ -55,6 +56,14 @@ class DriveController < ApplicationController
       Document.find_by!(id: params[:document_id], user: @current_user)
     rescue ActiveRecord::RecordNotFound
       raise DriveError::DocumentNotFound
+    end
+  end
+
+  private def find_folder
+    begin
+      Folder.find_by!(id: params[:folder_id], user: @current_user)
+    rescue ActiveRecord::RecordNotFound
+      raise DriveError::FolderNotFound
     end
   end
 

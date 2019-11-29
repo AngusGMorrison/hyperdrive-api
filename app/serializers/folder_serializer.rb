@@ -11,8 +11,8 @@ class FolderSerializer
       containing_folder_id: @folder.containing_folder_id,
       documents: get_serialized_documents,
       subfolders: serialize_subfolders,
-      created_at: @folder.created_at,
-      updated_at: @folder.updated_at
+      created_at: DateFormatter.format_date(@folder.created_at),
+      updated_at: DateFormatter.format_date(@folder.updated_at)
     }
   end
 

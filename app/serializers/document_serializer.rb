@@ -23,8 +23,8 @@ class DocumentSerializer < Serializer
       content_type: document.content_type,
       extension: document.get_file_extension,
       byte_size: document.byte_size,
-      created_at: Document.format_date(document.created_at),
-      updated_at: Document.format_date(document.updated_at)
+      created_at: DateFormatter.format_date(document.created_at),
+      updated_at: DateFormatter.format_date(document.updated_at)
     }
   end
 

@@ -10,6 +10,7 @@ class Folder < ApplicationRecord
   has_many :subfolders, class_name: :Folder, as: :parent_folder
   has_many :documents, as: :parent_folder
 
+  validates :name, length: { in: 1..50 }
   validate :user_has_only_one_root
   validate :has_parent_unless_root
   validate :root_has_no_parent

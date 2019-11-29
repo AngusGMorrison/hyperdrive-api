@@ -16,8 +16,4 @@ class Document < ApplicationRecord
     self.filename.to_s.match(/\..+\z/)[0]
   end
 
-  def self.format_date(date)
-    date.strftime('%b %-d, %Y')
-  end
-
 end

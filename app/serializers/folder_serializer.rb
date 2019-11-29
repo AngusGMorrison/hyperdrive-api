@@ -8,8 +8,8 @@ class FolderSerializer
     {
       id: @folder.id,
       name: @folder.name,
-      containing_folder_id: @folder.containing_folder_id,
-      documents: get_serialized_documents,
+      parent_folder_id: @folder.parent_folder_id,
+      files: get_serialized_documents,
       subfolders: serialize_subfolders,
       created_at: DateFormatter.format_date(@folder.created_at),
       updated_at: DateFormatter.format_date(@folder.updated_at)

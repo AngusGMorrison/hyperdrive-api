@@ -2,11 +2,21 @@ class DriveController < ApplicationController
 
   rescue_from DriveError::DocumentNotFound, with: :respond_to_error
   
-  def show
+  def show_root
     @current_user = get_current_user
-    folder = find_folder
+    @folder = @current_user.root_folder
+    respond_with_folder
+  end
+
+  def show_folder
+    @current_user = get_current_user
+    @folder = find_folder
+    respond_with_folder
+  end
+
+  private def respond_with_folder
     user_serializer = UserSerializer.new(user: @current_user)
-    response_body = user_serializer.serialize_with_folder_as_json(folder)
+    response_body = user_serializer.serialize_with_folder_as_json(@folder)
     render json: response_body, status: 200
   end
 

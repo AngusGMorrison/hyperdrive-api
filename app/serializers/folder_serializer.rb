@@ -9,7 +9,7 @@ class FolderSerializer
       id: @folder.id,
       name: @folder.name,
       parent_folder_id: @folder.parent_folder_id,
-      files: get_serialized_documents,
+      documents: get_serialized_documents,
       subfolders: serialize_subfolders,
       created_at: DateFormatter.format_date(@folder.created_at),
       updated_at: DateFormatter.format_date(@folder.updated_at)

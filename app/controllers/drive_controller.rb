@@ -1,36 +1,42 @@
 class DriveController < ApplicationController
 
   rescue_from DriveError::DocumentNotFound, with: :respond_to_error
+  rescue_from DriveError::FolderNotFound, with: :respond_to_error
   
   def show_root
     @current_user = get_current_user
     @folder = @current_user.root_folder
-    respond_with_folder
+    render_folder
   end
 
   def show_folder
     @current_user = get_current_user
     @folder = find_folder
-    respond_with_folder
+    render_folder
   end
 
-  private def respond_with_folder
-    user_serializer = UserSerializer.new(user: @current_user)
-    response_body = user_serializer.serialize_with_folder_as_json(@folder)
-    render json: response_body, status: 200
-  end
-
-  def create
+  def create_document
     @current_user = get_current_user
+    @folder = find_folder
     @document = Document.create(
       user_id: @current_user.id,
-      folder: @current_user.root_folder,
+      parent_folder: @folder,
       filename: params[:file].original_filename,
       content_type: params[:file].content_type,
       byte_size: params[:file].size
     )
     @document.file_data.attach(params[:file])
-    respond_with_document
+    validate_document_and_respond
+  end
+
+  private def validate_document_and_respond
+    @document.valid? ? render_folder : render_document_errors
+  end
+
+  private def render_folder
+    user_serializer = UserSerializer.new(user: @current_user)
+    response_body = user_serializer.serialize_with_folder_as_json(@folder)
+    render json: response_body, status: 200
   end
 
   def delete_document
@@ -46,8 +52,12 @@ class DriveController < ApplicationController
       response_body = user_serializer.serialize_with_documents_as_json(@document)
       render json: response_body, status: 201
     else
-      render json: { errors: @document.errors }, status: 400
+      render_document_errors
     end
+  end
+
+  private def render_document_errors
+    render json: { errors: @document.errors }, status: 400
   end
 
   def download_document

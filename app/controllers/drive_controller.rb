@@ -39,11 +39,19 @@ class DriveController < ApplicationController
     render json: response_body, status: 200
   end
 
+  def delete_folder
+    @current_user = get_current_user
+    folder_to_destroy = find_folder
+    folder_to_destroy.destroy()
+    @folder = folder_to_destroy.parent_folder
+    render_folder
+  end
+
   def delete_document
     @current_user = get_current_user
     document = find_document
-    @folder = document.parent_folder
     document.destroy()
+    @folder = document.parent_folder
     render_folder
   end
 
@@ -74,7 +82,7 @@ class DriveController < ApplicationController
 
   private def find_document
     begin
-      Document.find_by!(id: params[:document_id], user: @current_user)
+      Document.find_by!(id: params[:id], user: @current_user)
     rescue ActiveRecord::RecordNotFound
       raise DriveError::DocumentNotFound
     end
@@ -82,7 +90,7 @@ class DriveController < ApplicationController
 
   private def find_folder
     begin
-      Folder.find_by!(id: params[:folder_id], user: @current_user)
+      Folder.find_by!(id: params[:id], user: @current_user)
     rescue ActiveRecord::RecordNotFound
       raise DriveError::FolderNotFound
     end

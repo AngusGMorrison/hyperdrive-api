@@ -7,6 +7,7 @@ class FolderSerializer
   def serialize
     {
       id: @folder.id,
+      type: "folder",
       name: @folder.name,
       parent_folders: @folder.parent_folder ? serialize_parent_folders(@folder.parent_folder, []) : [],
       subfolders: serialize_subfolders,

@@ -19,6 +19,7 @@ class DocumentSerializer < Serializer
   def serialize_single_document(document)
     {
       id: document.id,
+      type: "document",
       filename: document.filename,
       content_type: document.content_type,
       extension: document.get_file_extension,

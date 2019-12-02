@@ -5,19 +5,21 @@ class Folder < ApplicationRecord
     SUBFOLDER: "__subfolder__"
   }
 
+  ROOT_NAME = "My Hyperdrive"
+
   belongs_to :user
   belongs_to :parent_folder, polymorphic: true, optional: true
   has_many :subfolders, class_name: :Folder, as: :parent_folder
   has_many :documents, as: :parent_folder
 
   validates :name, length: { in: 1..50 }
-  validate :user_has_only_one_root
+  validate :user_has_only_one_root, on: :create
   validate :has_parent_unless_root
   validate :root_has_no_parent
   validate :not_own_parent
 
   private def user_has_only_one_root
-    if level == Folder::LEVELS[:ROOT] && user.root_folder
+    if level == Folder::LEVELS[:ROOT] && user.root_folder && self != user.root_folder
       errors.add(:level, "User already has a root folder")
     end
   end

@@ -8,7 +8,7 @@ class User < ApplicationRecord
   after_create :create_root_folder
 
   private def create_root_folder
-    Folder.create(user_id: self.id, level: Folder::LEVELS[:ROOT], name: Folder::LEVELS[:ROOT])
+    Folder.create(user_id: self.id, level: Folder::LEVELS[:ROOT], name: Folder::ROOT_NAME)
   end
 
   def root_folder

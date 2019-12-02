@@ -41,9 +41,10 @@ class DriveController < ApplicationController
 
   def delete_document
     @current_user = get_current_user
-    @document = find_document
-    @document.destroy()
-    respond_with_document
+    document = find_document
+    @folder = document.parent_folder
+    document.destroy()
+    render_folder
   end
 
   private def respond_with_document

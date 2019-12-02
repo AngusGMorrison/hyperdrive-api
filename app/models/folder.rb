@@ -10,17 +10,17 @@ class Folder < ApplicationRecord
   belongs_to :user
   belongs_to :parent_folder, polymorphic: true, optional: true
   has_many :subfolders, class_name: :Folder, as: :parent_folder
-  has_many :documents, as: :parent_folder
+  has_many :documents, as: :parent_folder, dependent: :destroy
 
   validates :name, length: { in: 1..50 }
-  validate :user_has_only_one_root, on: :create
+  validate :root_folder_is_unique_and_immutable
   validate :has_parent_unless_root
   validate :root_has_no_parent
   validate :not_own_parent
 
-  private def user_has_only_one_root
-    if level == Folder::LEVELS[:ROOT] && user.root_folder && self != user.root_folder
-      errors.add(:level, "User already has a root folder")
+  private def root_folder_is_unique_and_immutable
+    if level == Folder::LEVELS[:ROOT] && user.root_folder 
+      errors.add(:level, "Root folder cannot be modified")
     end
   end
 

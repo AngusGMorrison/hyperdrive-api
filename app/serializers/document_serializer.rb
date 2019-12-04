@@ -20,7 +20,7 @@ class DocumentSerializer < Serializer
     {
       id: document.id,
       type: "document",
-      filename: document.filename,
+      name: document.filename,
       content_type: document.content_type,
       extension: document.get_file_extension,
       byte_size: document.byte_size,

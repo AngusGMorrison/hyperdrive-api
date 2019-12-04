@@ -11,13 +11,13 @@ class DriveController < ApplicationController
 
   def show_folder
     @current_user = get_current_user
-    @folder = find_folder
+    @folder = find_folder(params[:id])
     render_folder
   end
 
   def create_document
     @current_user = get_current_user
-    @folder = find_folder
+    @folder = find_folder(params[:id])
     @document = Document.create(
       user_id: @current_user.id,
       parent_folder: @folder,
@@ -30,7 +30,24 @@ class DriveController < ApplicationController
   end
 
   private def validate_document_and_respond
-    @document.valid? ? render_folder : render_document_errors
+    @document.valid? ? render_folder : render_object_errors(@document)
+  end
+
+  def create_folder
+    byebug
+    @current_user = get_current_user
+    @folder = find_folder(params[:parent_folder_id])
+    @new_folder = Folder.create(
+      user: @current_user,
+      parent_folder: @folder,
+      name: params[:folder][:name],
+      level: Folder::LEVELS[:SUBFOLDER]
+    )
+    validate_folder_and_respond
+  end
+
+  private def validate_folder_and_respond
+    @new_folder.valid? ? render_folder : render_object_errors(@new_folder)
   end
 
   private def render_folder
@@ -41,7 +58,7 @@ class DriveController < ApplicationController
 
   def delete_folder
     @current_user = get_current_user
-    folder_to_destroy = find_folder
+    folder_to_destroy = find_folder(params[:id])
     folder_to_destroy.destroy()
     @folder = folder_to_destroy.parent_folder
     render_folder
@@ -61,12 +78,12 @@ class DriveController < ApplicationController
       response_body = user_serializer.serialize_with_documents_as_json(@document)
       render json: response_body, status: 201
     else
-      render_document_errors
+      render_object_errors(@document)
     end
   end
 
-  private def render_document_errors
-    render json: { errors: @document.errors }, status: 400
+  private def render_object_errors(object)
+    render json: { errors: object.errors }, status: 400
   end
 
   def download_document
@@ -88,9 +105,9 @@ class DriveController < ApplicationController
     end
   end
 
-  private def find_folder
+  private def find_folder(id)
     begin
-      Folder.find_by!(id: params[:id], user: @current_user)
+      Folder.find_by!(id: id, user: @current_user)
     rescue ActiveRecord::RecordNotFound
       raise DriveError::FolderNotFound
     end

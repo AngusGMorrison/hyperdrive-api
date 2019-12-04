@@ -98,9 +98,21 @@ class DriveController < ApplicationController
   end
 
   def move_document
+    @current_user = get_current_user
+    @document = find_document
+    new_parent_folder = find_folder(params[:destination_folder_id])
+    @document.update(parent_folder: new_parent_folder)
+    @folder = @document.parent_folder
+    render_folder
   end
 
   def move_folder
+    @current_user = get_current_user
+    @folder_to_move = find_folder(params[:id])
+    @folder = @folder_to_move.parent_folder
+    new_parent_folder = find_folder(params[:destination_folder_id])
+    @folder_to_move.update(parent_folder: new_parent_folder)
+    render_folder
   end
 
   private def find_document

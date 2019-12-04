@@ -29,6 +29,7 @@ class FolderSerializer
   private def serialize_relative(relative)
     {
       id: relative.id,
+      type: "folder",
       name: relative.name,
       created_at: relative.created_at,
       updated_at: relative.updated_at

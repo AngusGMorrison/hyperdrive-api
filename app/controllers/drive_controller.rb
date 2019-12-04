@@ -34,7 +34,6 @@ class DriveController < ApplicationController
   end
 
   def create_folder
-    byebug
     @current_user = get_current_user
     @folder = find_folder(params[:parent_folder_id])
     @new_folder = Folder.create(
@@ -100,9 +99,9 @@ class DriveController < ApplicationController
   def move_document
     @current_user = get_current_user
     @document = find_document
+    @folder = @document.parent_folder
     new_parent_folder = find_folder(params[:destination_folder_id])
     @document.update(parent_folder: new_parent_folder)
-    @folder = @document.parent_folder
     render_folder
   end
 

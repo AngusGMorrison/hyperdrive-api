@@ -9,6 +9,7 @@ class FolderSerializer
       id: @folder.id,
       type: "folder",
       name: @folder.name,
+      level: @folder.level,
       parent_folders: @folder.parent_folder ? serialize_parent_folders(@folder.parent_folder, []) : [],
       subfolders: serialize_subfolders,
       documents: get_serialized_documents,
@@ -31,6 +32,7 @@ class FolderSerializer
       id: relative.id,
       type: "folder",
       name: relative.name,
+      level: relative.level,
       created_at: relative.created_at,
       updated_at: relative.updated_at
     }

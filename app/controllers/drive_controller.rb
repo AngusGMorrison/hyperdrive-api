@@ -3,15 +3,15 @@ class DriveController < ApplicationController
   rescue_from DriveError::DocumentNotFound, with: :respond_to_error
   rescue_from DriveError::FolderNotFound, with: :respond_to_error
   
-  def show_root
-    @current_user = get_current_user
-    @folder = @current_user.root_folder
-    render_folder
-  end
+  # def show_root
+  #   @current_user = get_current_user
+  #   @folder = @current_user.root_folder
+  #   render_folder
+  # end
 
   def show_folder
     @current_user = get_current_user
-    @folder = find_folder(params[:id])
+    @folder = params[:id] ? find_folder(params[:id]) : @current_user.root_folder
     render_folder
   end
 
@@ -95,6 +95,12 @@ class DriveController < ApplicationController
       disposition: 'attachment',
       status: 200
     );
+  end
+
+  def move_document
+  end
+
+  def move_folder
   end
 
   private def find_document

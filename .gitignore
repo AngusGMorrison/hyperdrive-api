@@ -24,3 +24,5 @@
 
 # Ignore docker-compose
 /docker-compose.yml
+
+/Dockerrun.aws.json

@@ -10,4 +10,14 @@ class DriveError < StandardError
     end
   end
 
+  class FolderNotFound < DriveError
+    def message
+      "Folder not found"
+    end
+
+    def status
+      404
+    end
+  end
+
 end

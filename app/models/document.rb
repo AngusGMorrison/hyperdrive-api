@@ -1,7 +1,7 @@
 class Document < ApplicationRecord
-  belongs_to :folder
-  belongs_to :user
 
+  belongs_to :user
+  belongs_to :parent_folder, polymorphic: true
   has_one_attached :file_data, dependent: :purge
 
   validate :document_size
@@ -14,10 +14,6 @@ class Document < ApplicationRecord
 
   def get_file_extension
     self.filename.to_s.match(/\..+\z/)[0]
-  end
-
-  def self.format_date(date)
-    date.strftime('%b %-d, %Y')
   end
 
 end

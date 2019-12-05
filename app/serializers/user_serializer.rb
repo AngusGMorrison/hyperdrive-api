@@ -16,6 +16,17 @@ class UserSerializer < Serializer
     }
   end
 
+  def serialize_with_folder_as_json(folder)
+    serialize_with_folder(folder).to_json
+  end
+
+  def serialize_with_folder(folder)
+    serialized_user = { user: serialize }
+    folder_serializer = FolderSerializer.new(folder: folder)
+    serialized_user[:folder] = folder_serializer.serialize()
+    serialized_user
+  end
+
   def serialize_with_documents_as_json(documents)
     serialize_with_documents(documents).to_json
   end

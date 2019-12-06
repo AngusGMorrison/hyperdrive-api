@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::API
 
-  rescue_from UserError::Unauthorized, with: :respond_to_error
-  rescue_from ActionController::ParameterMissing, with: :respond_to_error
+  rescue_from UserError::Unauthorized, with: :respond_with_error
+  rescue_from ActionController::ParameterMissing, with: :respond_with_error
 
-  private def respond_to_error(error)
+  private def respond_with_error(error)
     render json: { errors: error.message }, status: error.status || 400
   end
 
@@ -14,6 +14,13 @@ class ApplicationController < ActionController::API
     rescue StandardError
       raise UserError::Unauthorized
     end
+  end
+
+  private def find_authorized_user
+    user_id = decode_token.first['user_id']
+    User.find(user_id)
+  rescue StandardError
+    raise UserError::Unauthorized
   end
 
   private def issue_token(payload)
@@ -27,6 +34,16 @@ class ApplicationController < ActionController::API
 
   private def secret
     ENV['JWT_SECRET_KEY']
+  end
+
+  private def current_user_serializer
+    UserSerializer.new(user: @current_user)
+  end
+
+  private def render_validation_errors(model)
+    render json: { errors: model.errors }, status: 400
+  end
+
   end
 
 end

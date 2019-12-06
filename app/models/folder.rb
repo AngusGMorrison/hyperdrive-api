@@ -1,11 +1,9 @@
 class Folder < ApplicationRecord
 
-  LEVELS = {
-    ROOT: "__root__",
-    SUBFOLDER: "__subfolder__"
+  ROOT = {
+    level: "__root__",
+    name: "My Hyperdrive"
   }
-
-  ROOT_NAME = "My Hyperdrive"
 
   belongs_to :user
   belongs_to :parent_folder, polymorphic: true, optional: true
@@ -19,19 +17,19 @@ class Folder < ApplicationRecord
   validate :not_own_parent
 
   private def root_folder_is_unique_and_immutable
-    if level == Folder::LEVELS[:ROOT] && user.root_folder 
+    if level == ROOT[:level] && user.root_folder 
       errors.add(:level, "Root folder cannot be modified")
     end
   end
 
   private def has_parent_unless_root
-    unless level == Folder::LEVELS[:ROOT] || parent_folder
+    unless level == ROOT[:level] || parent_folder
       errors.add(:parent_folder, 'is required for non-root folders')
     end
   end
 
   private def root_has_no_parent
-    if level == Folder::LEVELS[:ROOT] && parent_folder
+    if level == ROOT[:level] && parent_folder
       errors.add(:parent_folder, 'cannot be added to a root folder')
     end
   end
@@ -40,6 +38,16 @@ class Folder < ApplicationRecord
     if self == parent_folder
       errors.add(:parent_folder, 'must be different to current folder')
     end
+  end
+
+  private def self.destroy_subfolder(folder)
+    raise DriveError::RootDeletion if folder.level == ROOT[:level]
+    folder.destroy
+  end
+
+  private def self.move_subfolder(folder_to_move, destination_folder)
+    raise DriveError::RootMove if folder.level == ROOT[:level]
+    folder_to_move.update(parent_folder: destination_folder)
   end
 
 end

@@ -1,7 +1,13 @@
 class DriveController < ApplicationController
 
-  rescue_from DriveError::DocumentNotFound, with: :respond_to_error
-  rescue_from DriveError::FolderNotFound, with: :respond_to_error
+  rescue_from DriveError::DocumentNotFound, with: :respond_with_error
+  # rescue_from DriveError::FolderNotFound, with: :respond_to_error
+
+  before_action :set_authorized_user
+
+  private def set_authorized_user
+    @current_user = find_authorized_user
+  end
   
   # def show_root
   #   @current_user = get_current_user
@@ -9,11 +15,11 @@ class DriveController < ApplicationController
   #   render_folder
   # end
 
-  def show_folder
-    @current_user = get_current_user
-    @folder = params[:id] ? find_folder(params[:id]) : @current_user.root_folder
-    render_folder
-  end
+  # def show_folder
+  #   @current_user = get_current_user
+  #   @folder = params[:id] ? find_folder(params[:id]) : @current_user.root_folder
+  #   render_folder
+  # end
 
   def create_document
     @current_user = get_current_user
@@ -33,35 +39,35 @@ class DriveController < ApplicationController
     @document.valid? ? render_folder : render_object_errors(@document)
   end
 
-  def create_folder
-    @current_user = get_current_user
-    @folder = find_folder(params[:parent_folder_id])
-    @new_folder = Folder.create(
-      user: @current_user,
-      parent_folder: @folder,
-      name: params[:folder][:name],
-      level: Folder::LEVELS[:SUBFOLDER]
-    )
-    validate_folder_and_respond
-  end
+  # def create_folder
+  #   @current_user = get_current_user
+  #   @folder = find_folder(params[:parent_folder_id])
+  #   @new_folder = Folder.create(
+  #     user: @current_user,
+  #     parent_folder: @folder,
+  #     name: params[:folder][:name],
+  #     level: Folder::LEVELS[:SUBFOLDER]
+  #   )
+  #   validate_folder_and_respond
+  # end
 
-  private def validate_folder_and_respond
-    @new_folder.valid? ? render_folder : render_object_errors(@new_folder)
-  end
+  # private def validate_folder_and_respond
+  #   @new_folder.valid? ? render_folder : render_object_errors(@new_folder)
+  # end
 
-  private def render_folder
-    user_serializer = UserSerializer.new(user: @current_user)
-    response_body = user_serializer.serialize_with_folder_as_json(@folder)
-    render json: response_body, status: 200
-  end
+  # private def render_folder
+  #   user_serializer = UserSerializer.new(user: @current_user)
+  #   response_body = user_serializer.serialize_with_folder_as_json(@folder)
+  #   render json: response_body, status: 200
+  # end
 
-  def delete_folder
-    @current_user = get_current_user
-    folder_to_destroy = find_folder(params[:id])
-    folder_to_destroy.destroy()
-    @folder = folder_to_destroy.parent_folder
-    render_folder
-  end
+  # def delete_folder
+  #   @current_user = get_current_user
+  #   folder_to_destroy = find_folder(params[:id])
+  #   folder_to_destroy.destroy()
+  #   @folder = folder_to_destroy.parent_folder
+  #   render_folder
+  # end
 
   def delete_document
     @current_user = get_current_user
@@ -81,9 +87,9 @@ class DriveController < ApplicationController
     end
   end
 
-  private def render_object_errors(object)
-    render json: { errors: object.errors }, status: 400
-  end
+  # private def render_object_errors(object)
+  #   render json: { errors: object.errors }, status: 400
+  # end
 
   def download_document
     @current_user = get_current_user
@@ -105,14 +111,14 @@ class DriveController < ApplicationController
     render_folder
   end
 
-  def move_folder
-    @current_user = get_current_user
-    @folder_to_move = find_folder(params[:id])
-    @folder = @folder_to_move.parent_folder
-    new_parent_folder = find_folder(params[:destination_folder_id])
-    @folder_to_move.update(parent_folder: new_parent_folder)
-    render_folder
-  end
+  # def move_folder
+  #   @current_user = get_current_user
+  #   @folder_to_move = find_folder(params[:id])
+  #   @folder = @folder_to_move.parent_folder
+  #   new_parent_folder = find_folder(params[:destination_folder_id])
+  #   @folder_to_move.update(parent_folder: new_parent_folder)
+  #   render_folder
+  # end
 
   private def find_document
     begin

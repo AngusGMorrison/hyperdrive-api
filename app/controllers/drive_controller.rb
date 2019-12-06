@@ -8,6 +8,17 @@ class DriveController < ApplicationController
   private def set_authorized_user
     @current_user = find_authorized_user
   end
+
+  private def find_owned_folder(id)
+    Folder.find_by!(id: id, user: @current_user)
+  rescue ActiveRecord::RecordNotFound
+    raise DriveError::FolderNotFound
+  end
+
+  private def render_folder(folder)
+    response_body = current_user_serializer.serialize_with_folder_as_json(folder)
+    render json: response_body, status: 200
+  end
   
   # def show_root
   #   @current_user = get_current_user

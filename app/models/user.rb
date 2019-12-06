@@ -32,6 +32,19 @@ class User < ApplicationRecord
     bytes <= self.remaining_storage
   end
 
+  protected def find_owned_folder(id)
+    Folder.find_by!(id: id, user: self)
+  rescue ActiveRecord::RecordNotFound
+    raise DriveError::FolderNotFound
+
+  end
+
+  protected def find_owned_document(id)
+    Document.find_by!(id: id, user: self)
+  rescue ActiveRecord::RecordNotFound
+    raise DriveError::DocumentNotFound
+  end
+
   validates :name, :email, :password, {
     presence: true
   }

@@ -14,7 +14,7 @@ class UsersController < ApplicationController
     if @user && @user.authenticate(params[:user][:password])
       respond_with_user_and_token
     else
-      render json: { errors: UserError::INCORRECT_LOGIN }, status: 403
+      raise UnauthorizedUser
     end
   end
 

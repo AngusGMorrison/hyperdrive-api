@@ -1,6 +1,6 @@
 class DocumentController < DriveController
 
-  rescue_from DriveError::DocumentNotFound, with: :respond_with_error
+  # rescue_from DriveError::DocumentNotFound, with: :respond_with_error
 
   def create
     parent_folder = @current_user.find_owned_folder(params[:document][:parent_folder_id])

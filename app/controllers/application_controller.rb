@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::API
-  include Authenticator
-  include Error::ErrorHandler
+  include Auth, Error::ErrorHandler
 
   private def render_success(body="Success!", status=200)
     render json: body, status: status

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include Error
 
   has_secure_password
 
@@ -36,7 +37,6 @@ class User < ApplicationRecord
     Folder.find_by!(id: id, user: self)
   rescue ActiveRecord::RecordNotFound
     raise FolderNotFound
-
   end
 
   def find_owned_document(id)

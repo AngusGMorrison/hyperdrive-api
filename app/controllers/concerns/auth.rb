@@ -1,4 +1,5 @@
-module Authenticator
+module Auth
+  include Error
 
   private def issue_token(payload)
     JWT.encode(payload, secret)

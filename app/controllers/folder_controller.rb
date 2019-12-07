@@ -1,9 +1,5 @@
 class FolderController < DriveController
 
-  # rescue_from DriveError::FolderNotFound, with: :respond_with_error
-  # rescue_from DriveError::RootDeletion, with: :respond_with_error
-  # rescue_from DriveError::RootMove, with: :respond_with_error
-
   def show
     folder = params[:id] ? @current_user.find_owned_folder(params[:id]) : @current_user.root_folder
     render_folder(folder)
@@ -16,7 +12,7 @@ class FolderController < DriveController
       parent_folder: parent_folder,
       name: params[:folder][:name]
     )
-    new_folder.valid? ? render_folder(parent_folder) : render_validation_errors(new_folder)
+    new_folder.valid? ? render_folder(parent_folder, 201) : render_validation_errors(new_folder)
   end
 
   def destroy

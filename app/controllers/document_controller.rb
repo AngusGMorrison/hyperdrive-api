@@ -12,7 +12,7 @@ class DocumentController < DriveController
       byte_size: params[:document].size
     )
     document.file_data.attach(params[:document])
-    document.valid? ? render_folder(parent_folder) : render_validation_errors(document)
+    document.valid? ? render_folder(parent_folder, 201) : render_validation_errors(document)
   end
 
   def destroy

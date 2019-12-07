@@ -10,9 +10,9 @@ class DriveController < ApplicationController
     UserSerializer.new(user: @current_user)
   end
 
-  private def render_folder(folder)
+  private def render_folder(folder, status=200)
     response_body = current_user_serializer.serialize_with_folder_as_json(folder)
-    render json: response_body, status: 200
+    render_success(response_body, status)
   end
 
 end

@@ -5,7 +5,7 @@ class DocumentsController < DriveController
     send_data(
       document.file_data.download,
       filename: document.filename,
-      disposition: attachment,
+      disposition: 'attachment',
       status: 200
     )
   end

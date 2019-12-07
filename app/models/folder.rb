@@ -46,7 +46,7 @@ class Folder < ApplicationRecord
   end
 
   def self.move_subfolder(folder_to_move, destination_folder)
-    raise DriveError::RootMove if folder.level == ROOT[:level]
+    raise DriveError::RootMove if folder_to_move.level == ROOT[:level]
     folder_to_move.update(parent_folder: destination_folder)
   end
 

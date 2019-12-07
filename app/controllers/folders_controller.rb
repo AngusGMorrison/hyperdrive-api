@@ -17,7 +17,7 @@ class FoldersController < DriveController
 
   def move
     folder_to_move = @current_user.find_owned_folder(params[:id])
-    destination_folder = @current_user.find_owned_folder(params[:destination_folder])
+    destination_folder = @current_user.find_owned_folder(params[:destination_folder_id])
     folder_to_render = folder_to_move.parent_folder
     Folder.move_subfolder(folder_to_move, destination_folder)
     render_folder(folder_to_render)
@@ -25,7 +25,7 @@ class FoldersController < DriveController
 
   def destroy
     folder_to_destroy = @current_user.find_owned_folder(params[:id])
-    folder_to_render = folder_to_destory.parent_folder
+    folder_to_render = folder_to_destroy.parent_folder
     Folder.destroy_subfolder(folder_to_destroy)
     render_folder(folder_to_render)
   end

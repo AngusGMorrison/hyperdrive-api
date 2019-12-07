@@ -1,6 +1,14 @@
-class DocumentController < DriveController
+class DocumentsController < DriveController
 
-  # rescue_from DriveError::DocumentNotFound, with: :respond_with_error
+  def download
+    document = @current_user.find_owned_document(params[:id])
+    send_data(
+      document.file_data.download,
+      filename: document.filename,
+      disposition: attachment,
+      status: 200
+    )
+  end
 
   def create
     parent_folder = @current_user.find_owned_folder(params[:document][:parent_folder_id])
@@ -15,13 +23,6 @@ class DocumentController < DriveController
     document.valid? ? render_folder(parent_folder, 201) : render_validation_errors(document)
   end
 
-  def destroy
-    document = @current_user.find_owned_document(params[:id])
-    folder_to_render = document.parent_folder
-    document.destroy
-    render_folder(folder_to_render)
-  end
-
   def move
     document = @current_user.find_owned_document(params[:id])
     destination_folder = @current_user.find_owned_folder(params[:destination_folder_id])
@@ -30,14 +31,11 @@ class DocumentController < DriveController
     render_folder(folder_to_render)
   end
 
-  def download
+  def destroy
     document = @current_user.find_owned_document(params[:id])
-    send_data(
-      document.file_data.download,
-      filename: document.filename,
-      disposition: attachment,
-      status: 200
-    )
+    folder_to_render = document.parent_folder
+    document.destroy
+    render_folder(folder_to_render)
   end
 
 end

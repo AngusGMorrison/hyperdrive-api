@@ -1,4 +1,4 @@
-class FolderController < DriveController
+class FoldersController < DriveController
 
   def show
     folder = params[:id] ? @current_user.find_owned_folder(params[:id]) : @current_user.root_folder
@@ -15,18 +15,18 @@ class FolderController < DriveController
     new_folder.valid? ? render_folder(parent_folder, 201) : render_validation_errors(new_folder)
   end
 
-  def destroy
-    folder_to_destroy = @current_user.find_owned_folder(params[:id])
-    folder_to_render = folder_to_destory.parent_folder
-    Folder.destroy_subfolder(folder_to_destroy)
-    render_folder(folder_to_render)
-  end
-
   def move
     folder_to_move = @current_user.find_owned_folder(params[:id])
     destination_folder = @current_user.find_owned_folder(params[:destination_folder])
     folder_to_render = folder_to_move.parent_folder
     Folder.move_subfolder(folder_to_move, destination_folder)
+    render_folder(folder_to_render)
+  end
+
+  def destroy
+    folder_to_destroy = @current_user.find_owned_folder(params[:id])
+    folder_to_render = folder_to_destory.parent_folder
+    Folder.destroy_subfolder(folder_to_destroy)
     render_folder(folder_to_render)
   end
 

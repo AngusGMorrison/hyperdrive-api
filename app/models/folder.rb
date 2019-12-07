@@ -40,12 +40,12 @@ class Folder < ApplicationRecord
     end
   end
 
-  private def self.destroy_subfolder(folder)
+  def self.destroy_subfolder(folder)
     raise DriveError::RootDeletion if folder.level == ROOT[:level]
     folder.destroy
   end
 
-  private def self.move_subfolder(folder_to_move, destination_folder)
+  def self.move_subfolder(folder_to_move, destination_folder)
     raise DriveError::RootMove if folder.level == ROOT[:level]
     folder_to_move.update(parent_folder: destination_folder)
   end

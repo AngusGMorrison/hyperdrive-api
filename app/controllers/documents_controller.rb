@@ -11,7 +11,7 @@ class DocumentsController < DriveController
   end
 
   def create
-    parent_folder = @current_user.find_owned_folder(params[:document][:parent_folder_id])
+    parent_folder = @current_user.find_owned_folder(params[:parent_folder_id])
     document = Document.create(
       user_id: @current_user.id,
       parent_folder: parent_folder,

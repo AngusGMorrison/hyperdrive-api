@@ -28,8 +28,8 @@ class ApplicationController < ActionController::API
     ENV['JWT_SECRET_KEY']
   end
 
-  private def current_user_serializer
-    UserSerializer.new(user: @current_user)
+  private def render_success(body="Success!", status=200)
+    render json: body, status: status
   end
 
   private def render_validation_errors(model)

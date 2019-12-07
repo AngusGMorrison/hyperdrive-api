@@ -6,6 +6,10 @@ class DriveController < ApplicationController
     @current_user = find_authorized_user
   end
 
+  private def current_user_serializer
+    UserSerializer.new(user: @current_user)
+  end
+
   private def render_folder(folder)
     response_body = current_user_serializer.serialize_with_folder_as_json(folder)
     render json: response_body, status: 200

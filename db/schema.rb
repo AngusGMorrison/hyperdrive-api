@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_29_104245) do
+ActiveRecord::Schema.define(version: 2019_12_06_201407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 2019_11_29_104245) do
     t.bigint "user_id", null: false
     t.string "parent_folder_type"
     t.bigint "parent_folder_id"
-    t.string "level", null: false
+    t.string "level", default: "__subfolder__", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name", null: false

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  include Error
 
   has_secure_password
 
@@ -8,11 +9,11 @@ class User < ApplicationRecord
   after_create :create_root_folder
 
   private def create_root_folder
-    Folder.create(user_id: self.id, level: Folder::LEVELS[:ROOT], name: Folder::ROOT_NAME)
+    Folder.create(user_id: self.id, level: Folder::ROOT[:level], name: Folder::ROOT[:name])
   end
 
   def root_folder
-    self.folders.find_by(level: Folder::LEVELS[:ROOT])
+    self.folders.find_by(level: Folder::ROOT[:level])
   end
 
   def capitalized_name
@@ -30,6 +31,18 @@ class User < ApplicationRecord
 
   def has_enough_storage?(bytes)
     bytes <= self.remaining_storage
+  end
+
+  def find_owned_folder(id)
+    Folder.find_by!(id: id, user: self)
+  rescue ActiveRecord::RecordNotFound
+    raise FolderNotFound
+  end
+
+  def find_owned_document(id)
+    Document.find_by!(id: id, user: self)
+  rescue ActiveRecord::RecordNotFound
+    raise DocumentNotFound
   end
 
   validates :name, :email, :password, {

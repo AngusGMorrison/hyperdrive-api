@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  include Error
+  include Error, StorageCalculator
 
   has_secure_password
 
@@ -19,18 +19,6 @@ class User < ApplicationRecord
   def capitalized_name
     name_array = self.name.split(" ")
     name_array.map(&:capitalize).join(" ")
-  end
-
-  def storage_used_in_bytes
-    self.documents.sum { |document| document.byte_size }
-  end
-
-  def remaining_storage_in_bytes
-    self.storage_allowance - self.storage_used_in_bytes
-  end
-
-  def has_enough_storage?(bytes)
-    bytes <= self.remaining_storage
   end
 
   def find_owned_folder(id)

@@ -12,7 +12,7 @@ class Document < ApplicationRecord
     end
   end
 
-  def get_file_extension
+  def file_extension
     self.filename.to_s.match(/\..+\z/)[0]
   end
 

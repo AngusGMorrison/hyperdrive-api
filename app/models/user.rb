@@ -18,25 +18,8 @@ class User < ApplicationRecord
     raise MissingRoot
   end
 
-  def capitalized_name
-    name_array = self.name.split(" ")
-    name_array.map(&:capitalize).join(" ")
-  end
-
-  def find_owned_folder(id)
-    Folder.find_by!(id: id, user: self)
-  rescue ActiveRecord::RecordNotFound
-    raise FolderNotFound
-  end
-
-  def find_owned_document(id)
-    Document.find_by!(id: id, user: self)
-  rescue ActiveRecord::RecordNotFound
-    raise DocumentNotFound
-  end
-
-  def find_owned(model_as_symbol, id)
-    class_name = model_as_symbol.to_s.classify.constantize
+  def find_owned(model_name, id)
+    class_name = model_name.to_s.classify.constantize
     class_name.find_by!(id: id, user: self)
   rescue ActiveRecord::RecordNotFound
     raise NotFound(class_name)

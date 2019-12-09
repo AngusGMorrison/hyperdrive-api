@@ -14,8 +14,8 @@ class User < ApplicationRecord
 
   validates :name, {
     format: {
-      with: ValidationRegexps::NAME,
-      message: "must be 2-50 chars (only letters, spaces, - and ')."
+      with: Validation::RegExps::NAME,
+      message: Validation::Messages::NAME
     }
   }
 
@@ -25,14 +25,14 @@ class User < ApplicationRecord
     },
     format: {
       with: URI::MailTo::EMAIL_REGEXP,
-      message: "is invalid."
+      message: Validation::Messages::EMAIL
     }
   }
 
   validates :password, {
     format: {
-      with: ValidationRegexps::PASSWORD,
-      message: "needs min. 8 chars: 1 number, 1 upper, 1 lower, 1 special."
+      with: Validation::RegExps::PASSWORD,
+      message: Validation::Messages::PASSWORD
     }
   }
 
@@ -41,7 +41,7 @@ class User < ApplicationRecord
   end
 
   def root_folder
-    self.folders.find_by(level: Folder::ROOT[:level])
+    self.folders.find_by!(level: Folder::ROOT[:level])
   rescue ActiveRecord::RecordNotFound
     raise MissingRootFolder
   end

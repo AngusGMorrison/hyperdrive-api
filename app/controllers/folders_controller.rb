@@ -1,6 +1,8 @@
 class FoldersController < DriveController
 
   def show
+    p @current_user.folders
+    p @current_user.root_folder
     folder = params[:id] ? @current_user.find_owned(:folder, params[:id]) : @current_user.root_folder
     render_folder(folder)
   end

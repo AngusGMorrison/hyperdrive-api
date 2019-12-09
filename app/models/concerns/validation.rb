@@ -9,6 +9,13 @@ module Validation
     NAME = "must be 2-50 chars (only letters, spaces, - and ')."
     EMAIL = "is invalid."
     PASSWORD = "needs min. 8 chars: 1 number, 1 upper, 1 lower, 1 special."
+
+    FOLDER = {
+      immutable_root: "Root folder cannot be modified",
+      parent_folder_required: "is required for non-root folders",
+      root_has_parent: "cannot be added to a root folder",
+      own_parent: "must be different to current folder"
+    }
   end
 
 end

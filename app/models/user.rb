@@ -8,6 +8,10 @@ class User < ApplicationRecord
 
   after_create :create_root_folder
 
+  private def create_root_folder
+    Folder.create(user_id: self.id, level: Folder::ROOT[:level], name: Folder::ROOT[:name])
+  end
+
   validates :name, :email, :password, {
     presence: true
   }
@@ -35,10 +39,6 @@ class User < ApplicationRecord
       message: Validation::Messages::PASSWORD
     }
   }
-
-  private def create_root_folder
-    Folder.create(user_id: self.id, level: Folder::ROOT[:level], name: Folder::ROOT[:name])
-  end
 
   def root_folder
     self.folders.find_by!(level: Folder::ROOT[:level])

@@ -13,7 +13,9 @@ class User < ApplicationRecord
   end
 
   def root_folder
-    self.folders.find_by(level: Folder::ROOT[:level])
+    self.folders.find_by!(level: Folder::ROOT[:level])
+  rescue ActiveRecord::RecordNotFound
+    raise MissingRoot
   end
 
   def capitalized_name
@@ -31,6 +33,13 @@ class User < ApplicationRecord
     Document.find_by!(id: id, user: self)
   rescue ActiveRecord::RecordNotFound
     raise DocumentNotFound
+  end
+
+  def find_owned(model_as_symbol, id)
+    class_name = model_as_symbol.to_s.classify.constantize
+    class_name.find_by!(id: id, user: self)
+  rescue ActiveRecord::RecordNotFound
+    raise NotFound(class_name)
   end
 
   validates :name, :email, :password, {

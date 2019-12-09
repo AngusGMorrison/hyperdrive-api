@@ -5,10 +5,11 @@ module Error
       target_class.class_eval do
         rescue_from ActionController::ParameterMissing, with: :respond_with_error
         rescue_from UnauthorizedUser, with: :respond_with_error
-        rescue_from FolderNotFound, with: :respond_with_error
+        # rescue_from FolderNotFound, with: :respond_with_error
         rescue_from RootDeletionError, with: :respond_with_error
         rescue_from RootMoveError, with: :respond_with_error
-        rescue_from DocumentNotFound, with: :respond_with_error
+        # rescue_from DocumentNotFound, with: :respond_with_error
+        rescue_from NotFound, with: :respond_with_error
       end
     end
 
@@ -38,6 +39,12 @@ module Error
     end
   end
 
+  class MissingRoot < HyperdriveError
+    def initialize
+      super("Root folder is missing. This shouldn't happen.", 500)
+    end
+  end
+
   class RootDeletionError < HyperdriveError
     def initialize
       super("Root folder cannot be deleted", 400)
@@ -53,6 +60,12 @@ module Error
   class DocumentNotFound < HyperdriveError
     def initialize
       super("Document not found", 404)
+    end
+  end
+
+  class NotFound < HyperdriveError
+    def initialize(class_name)
+      super(class_name + "not found", 404)
     end
   end
 

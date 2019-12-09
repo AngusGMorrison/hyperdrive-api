@@ -17,7 +17,7 @@ class Folder < ApplicationRecord
   validate :not_own_parent
 
   private def root_folder_is_unique_and_immutable
-    if level == ROOT[:level] && user.root_folder 
+    if level == ROOT[:level] && user.folders.length > 0
       errors.add(:level, "Root folder cannot be modified")
     end
   end

@@ -1,7 +1,7 @@
 class DocumentsController < DriveController
 
   def download
-    document = @current_user.find_owned_document(params[:id])
+    document = @current_user.find_owned(:document, params[:id])
     send_data(
       document.file_data.download,
       filename: document.filename,
@@ -11,7 +11,7 @@ class DocumentsController < DriveController
   end
 
   def create
-    parent_folder = @current_user.find_owned_folder(params[:parent_folder_id])
+    parent_folder = @current_user.find_owned(:folder, params[:parent_folder_id])
     document = Document.create(
       user_id: @current_user.id,
       parent_folder: parent_folder,
@@ -24,15 +24,15 @@ class DocumentsController < DriveController
   end
 
   def move
-    document = @current_user.find_owned_document(params[:id])
-    destination_folder = @current_user.find_owned_folder(params[:destination_folder_id])
+    document = @current_user.find_owned(:document, params[:id])
+    destination_folder = @current_user.find_owned(:folder, params[:destination_folder_id])
     folder_to_render = document.parent_folder
     document.update(parent_folder: destination_folder)
     render_folder(folder_to_render)
   end
 
   def destroy
-    document = @current_user.find_owned_document(params[:id])
+    document = @current_user.find_owned(:document, params[:id])
     folder_to_render = document.parent_folder
     document.destroy
     render_folder(folder_to_render)

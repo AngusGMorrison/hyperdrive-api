@@ -41,7 +41,7 @@ class UserSerializer < Serializer
   def serialize
     {
       id: @user.id,
-      name: @user.capitalized_name,
+      name: @user.name.titleize,
       remaining_storage: @user.remaining_storage_in_bytes,
       storage_used: @user.storage_used_in_bytes,
       storage_allowance: @user.storage_allowance

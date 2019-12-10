@@ -22,7 +22,7 @@ class DocumentSerializer < Serializer
       type: "document",
       name: document.filename,
       content_type: document.content_type,
-      extension: document.get_file_extension,
+      extension: document.file_extension,
       byte_size: document.byte_size,
       created_at: DateFormatter.format_date(document.created_at),
       updated_at: DateFormatter.format_date(document.updated_at)

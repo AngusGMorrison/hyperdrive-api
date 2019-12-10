@@ -11,43 +11,45 @@ class Folder < ApplicationRecord
   has_many :documents, as: :parent_folder, dependent: :destroy
 
   validates :name, length: { in: 1..50 }
-  validate :root_folder_is_unique_and_immutable
-  validate :has_parent_unless_root
-  validate :root_has_no_parent
-  validate :not_own_parent
+  validate(
+    :is_unique_and_immutable_if_root,
+    :has_parent_unless_root,
+    :has_no_parent_if_root,
+    :is_not_own_parent
+  )
 
-  private def root_folder_is_unique_and_immutable
-    if level == ROOT[:level] && user.root_folder 
-      errors.add(:level, "Root folder cannot be modified")
+  private def is_unique_and_immutable_if_root
+    if level == ROOT[:level] && Folder.find_by(level: ROOT[:level], user: user)
+      errors.add(:level, Validation::Messages::FOLDER[:immutable_root])
     end
   end
 
   private def has_parent_unless_root
     unless level == ROOT[:level] || parent_folder
-      errors.add(:parent_folder, 'is required for non-root folders')
+      errors.add(:parent_folder, Validation::Messages::FOLDER[:parent_folder_required])
     end
   end
 
-  private def root_has_no_parent
+  private def has_no_parent_if_root
     if level == ROOT[:level] && parent_folder
-      errors.add(:parent_folder, 'cannot be added to a root folder')
+      errors.add(:parent_folder, Validation::Messages::FOLDER[:root_has_parent])
     end
   end
 
-  private def not_own_parent
+  private def is_not_own_parent
     if self == parent_folder
-      errors.add(:parent_folder, 'must be different to current folder')
+      errors.add(:parent_folder, Validation::Messages::FOLDER[:own_parent])
     end
-  end
-
-  def self.destroy_subfolder(folder)
-    raise DriveError::RootDeletion if folder.level == ROOT[:level]
-    folder.destroy
   end
 
   def self.move_subfolder(folder_to_move, destination_folder)
-    raise DriveError::RootMove if folder_to_move.level == ROOT[:level]
+    raise RootFolderMove if folder_to_move.level == ROOT[:level]
     folder_to_move.update(parent_folder: destination_folder)
+  end
+
+  def self.destroy_subfolder(folder)
+    raise RootFolderDeletion if folder.level == ROOT[:level]
+    folder.destroy
   end
 
 end

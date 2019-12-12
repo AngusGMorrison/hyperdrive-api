@@ -21,7 +21,7 @@ class Serializer
 
   private def create_inclusion_serializer(inclusion)
     serializer_class = get_serializer_class(inclusion)
-    serializer_class.new(target: inclusion)
+    serializer_class.new(object: inclusion)
   end
 
   private def get_serializer_class(inclusion)

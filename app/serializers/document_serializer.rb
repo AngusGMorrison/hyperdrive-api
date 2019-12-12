@@ -4,10 +4,6 @@ class DocumentSerializer < Serializer
     super(object: object)
   end
 
-  # def serialize_as_json
-  #   { documents: serialize }.to_json()
-  # end
-
   private def get_serialized_object
     { documents: serialize_each_document }
   end

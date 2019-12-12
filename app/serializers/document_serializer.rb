@@ -19,7 +19,7 @@ class DocumentSerializer < Serializer
   private def serialize_single_document(document)
     {
       id: document.id,
-      type: "document",
+      type: FILE_TYPES.document,
       name: document.filename,
       content_type: document.content_type,
       extension: document.file_extension,

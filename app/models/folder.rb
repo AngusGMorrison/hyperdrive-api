@@ -3,7 +3,7 @@ class Folder < ApplicationRecord
   ROOT = {
     level: "__root__",
     name: "My Hyperdrive"
-  }
+  }.freeze
 
   belongs_to :user
   belongs_to :parent_folder, polymorphic: true, optional: true

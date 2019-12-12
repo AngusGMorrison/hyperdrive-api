@@ -1,8 +1,7 @@
 class Folder < ApplicationRecord
-
   ROOT = {
-    level: "__root__",
-    name: "My Hyperdrive"
+    level: '__root__',
+    name: 'My Hyperdrive'
   }.freeze
 
   belongs_to :user
@@ -12,34 +11,30 @@ class Folder < ApplicationRecord
 
   validates :name, length: { in: 1..50 }
   validate(
-    :is_unique_and_immutable_if_root,
-    :has_parent_unless_root,
-    :has_no_parent_if_root,
-    :is_not_own_parent
+    :unique_and_immutable_if_root?,
+    :has_parent_unless_root?,
+    :no_parent_if_root?,
+    :not_own_parent?
   )
 
-  private def is_unique_and_immutable_if_root
-    if level == ROOT[:level] && Folder.find_by(level: ROOT[:level], user: user)
-      errors.add(:level, Validation::Messages::FOLDER[:immutable_root])
-    end
+  private def unique_and_immutable_if_root?
+    return unless level == ROOT[:level] && Folder.find_by(level: ROOT[:level], user: user)
+    errors.add(:level, Validation::Messages::FOLDER[:immutable_root])
   end
 
-  private def has_parent_unless_root
-    unless level == ROOT[:level] || parent_folder
-      errors.add(:parent_folder, Validation::Messages::FOLDER[:parent_folder_required])
-    end
+  private def has_parent_unless_root?
+    return if level == ROOT[:level] || parent_folder
+    errors.add(:parent_folder, Validation::Messages::FOLDER[:parent_folder_required])
   end
 
-  private def has_no_parent_if_root
-    if level == ROOT[:level] && parent_folder
-      errors.add(:parent_folder, Validation::Messages::FOLDER[:root_has_parent])
-    end
+  private def no_parent_if_root?
+    return unless level == ROOT[:level] && parent_folder
+    errors.add(:parent_folder, Validation::Messages::FOLDER[:root_has_parent])
   end
 
-  private def is_not_own_parent
-    if self == parent_folder
-      errors.add(:parent_folder, Validation::Messages::FOLDER[:own_parent])
-    end
+  private def not_own_parent?
+    return unless self == parent_folder
+    errors.add(:parent_folder, Validation::Messages::FOLDER[:own_parent])
   end
 
   def self.move_subfolder(folder_to_move, destination_folder)
@@ -51,5 +46,4 @@ class Folder < ApplicationRecord
     raise RootFolderDeletion if folder.level == ROOT[:level]
     folder.destroy
   end
-
 end

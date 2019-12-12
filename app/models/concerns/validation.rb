@@ -7,8 +7,8 @@ module Validation
 
   module Messages
     USER = {
-      name: 'must be 2-50 chars (only letters, spaces, - and \').'
-      email: 'is invalid.'
+      name: 'must be 2-50 chars (only letters, spaces, - and \').',
+      email: 'is invalid.',
       password: 'needs min. 8 chars: 1 number, 1 upper, 1 lower, 1 special.'
     }
 

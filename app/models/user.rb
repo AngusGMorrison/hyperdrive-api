@@ -18,7 +18,7 @@ class User < ApplicationRecord
 
   validates :name, {
     format: {
-      with: Validation::RegExps::USER,
+      with: Validation::RegExps::NAME,
       message: Validation::Messages::USER[:name]
     }
   }

@@ -1,25 +1,25 @@
 class DocumentSerializer < Serializer
 
-  def initialize(documents: [])
-    @documents = documents
+  def initialize(object:)
+    super(object: object)
   end
 
-  def serialize_as_json
-    { documents: serialize }.to_json()
+  private def get_serialized_object
+    { documents: serialize_each_document }
   end
 
-  def serialize
-    if @documents.respond_to?(:map)
-      @documents.map { |document| serialize_single_document(document) }
+  private def serialize_each_document
+    if @object.respond_to?(:map)
+      @object.map { |document| serialize_single_document(document) }
     else
-      [ serialize_single_document(@documents) ]
+      [ serialize_single_document(@object) ]
     end
   end
 
-  def serialize_single_document(document)
+  private def serialize_single_document(document)
     {
       id: document.id,
-      type: "document",
+      type: FILE_TYPES[:document],
       name: document.filename,
       content_type: document.content_type,
       extension: document.file_extension,

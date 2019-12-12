@@ -1,20 +1,22 @@
-class FolderSerializer
+class FolderSerializer < Serializer
 
-  def initialize(folder:)
-    @folder = folder
+  def initialize(object:)
+    super(object: object)
   end
 
-  def serialize
-    {
-      id: @folder.id,
-      type: "folder",
-      name: @folder.name,
-      level: @folder.level,
-      parent_folders: @folder.parent_folder ? serialize_parent_folders(@folder.parent_folder, []) : [],
-      subfolders: serialize_subfolders,
-      documents: get_serialized_documents,
-      created_at: DateFormatter.format_date(@folder.created_at),
-      updated_at: DateFormatter.format_date(@folder.updated_at)
+  private def get_serialized_object
+    { 
+      folder: {
+        id: @object.id,
+        type: FILE_TYPES[:folder],
+        name: @object.name,
+        level: @object.level,
+        parent_folders: @object.parent_folder ? serialize_parent_folders(@object.parent_folder, []) : [],
+        subfolders: serialize_subfolders,
+        documents: get_serialized_documents,
+        created_at: DateFormatter.format_date(@object.created_at),
+        updated_at: DateFormatter.format_date(@object.updated_at)
+      }
     }
   end
 
@@ -24,7 +26,7 @@ class FolderSerializer
   end
 
   private def serialize_subfolders
-    @folder.subfolders.map { |subfolder| serialize_relative(subfolder) }
+    @object.subfolders.map { |subfolder| serialize_relative(subfolder) }
   end
 
   private def serialize_relative(relative)
@@ -39,8 +41,9 @@ class FolderSerializer
   end
 
   private def get_serialized_documents
-    doc_serializer = DocumentSerializer.new(documents: @folder.documents)
-    doc_serializer.serialize()
+    doc_serializer = DocumentSerializer.new(object: @object.documents)
+    serialized_documents = doc_serializer.serialize()
+    serialized_documents[:documents]
   end
 
 end

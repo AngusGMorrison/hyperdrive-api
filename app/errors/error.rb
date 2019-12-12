@@ -7,7 +7,7 @@ module Error
         rescue_from UnauthorizedUser, with: :respond_with_error
         rescue_from RootFolderDeletion, with: :respond_with_error
         rescue_from RootFolderMove, with: :respond_with_error
-        rescue_from NotFound, with: :respond_with_error
+        rescue_from OwnedObjectNotFound, with: :respond_with_error
       end
     end
 
@@ -49,9 +49,15 @@ module Error
     end
   end
 
-  class NotFound < HyperdriveError
+  class OwnedObjectNotFound < HyperdriveError
     def initialize(class_name)
-      super(class_name + "not found", 404)
+      super(class_name + " not found for the current user", 404)
+    end
+  end
+
+  class SerializerNotFound < HyperdriveError
+    def initialize(serializer_name)
+      super("Couldn't find a serializer called " + serializer_name, 500)
     end
   end
 

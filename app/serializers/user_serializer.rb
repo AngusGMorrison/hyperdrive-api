@@ -1,50 +1,16 @@
 class UserSerializer < Serializer
 
-  def initialize(user:)
-    super()
-    @user = user
+  def initialize(object:)
+    super(object: object)
   end
 
-  def serialize_with_token_as_json(token)
-    serialize_with_token(token).to_json
-  end
-
-  def serialize_with_token(token)
+  private def get_serialized_object
     {
-      token: token,
-      user: serialize
-    }
-  end
-
-  def serialize_with_folder_as_json(folder)
-    serialize_with_folder(folder).to_json
-  end
-
-  def serialize_with_folder(folder)
-    serialized_user = { user: serialize }
-    folder_serializer = FolderSerializer.new(folder: folder)
-    serialized_user[:folder] = folder_serializer.serialize()
-    serialized_user
-  end
-
-  def serialize_with_documents_as_json(documents)
-    serialize_with_documents(documents).to_json
-  end
-
-  def serialize_with_documents(documents)
-    serialized_user = { user: serialize }
-    doc_serializer = DocumentSerializer.new(documents: documents)
-    serialized_user[:documents] = doc_serializer.serialize()
-    serialized_user
-  end
-
-  def serialize
-    {
-      id: @user.id,
-      name: @user.name.titleize,
-      remaining_storage: @user.remaining_storage_in_bytes,
-      storage_used: @user.storage_used_in_bytes,
-      storage_allowance: @user.storage_allowance
+      id: @object.id,
+      name: @object.name.titleize,
+      remaining_storage: @object.remaining_storage_in_bytes,
+      storage_used: @object.storage_used_in_bytes,
+      storage_allowance: @object.storage_allowance
     }
   end
 

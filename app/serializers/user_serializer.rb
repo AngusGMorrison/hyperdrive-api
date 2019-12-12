@@ -1,37 +1,36 @@
 class UserSerializer < Serializer
 
-  def initialize(target:)
-    super()
-    @user = target
+  def initialize(object:)
+    super(object: object)
   end
 
-  def serialize(inclusions: nil, authorization: nil, json: false)
-    @serialized_user = get_serialized_user
-    merge_inclusions(inclusions) if inclusions
-    merge_authorization(authorization) if authorization
-    json ? @serialized_user.to_json : @serialized_user
-  end
-
-  private def get_serialized_user
+  private def get_serialized_object
     {
-      id: @user.id,
-      name: @user.name.titleize,
-      remaining_storage: @user.remaining_storage_in_bytes,
-      storage_used: @user.storage_used_in_bytes,
-      storage_allowance: @user.storage_allowance
+      id: @object.id,
+      name: @object.name.titleize,
+      remaining_storage: @object.remaining_storage_in_bytes,
+      storage_used: @object.storage_used_in_bytes,
+      storage_allowance: @object.storage_allowance
     }
   end
 
-  private def merge_inclusions(inclusions)
-    inclusions.each do |inclusion|
-      serializer = get_included_serializer(inclusion)
-      @serialized_user.merge!(serializer.serialize)
-    end
-  end
+  # def serialize(inclusions: nil, authorization: nil, json: false)
+  #   @serialized_user = get_serialized_user
+  #   merge_inclusions(inclusions) if inclusions
+  #   merge_authorization(authorization) if authorization
+  #   json ? @serialized_user.to_json : @serialized_user
+  # end
 
-  private def merge_authorization(authorization)
-    @serialized_user.merge!({ authorization: authorization });
-  end
+  # private def merge_inclusions(inclusions)
+  #   inclusions.each do |inclusion|
+  #     serializer = get_included_serializer(inclusion)
+  #     @serialized_user.merge!(serializer.serialize)
+  #   end
+  # end
+
+  # private def merge_authorization(authorization)
+  #   @serialized_user.merge!({ authorization: authorization });
+  # end
 
   # def serialize_with_token_as_json(token)
   #   serialize_with_token(token).to_json

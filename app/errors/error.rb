@@ -51,7 +51,13 @@ module Error
 
   class NotFound < HyperdriveError
     def initialize(class_name)
-      super(class_name + "not found", 404)
+      super(class_name + " not found", 404)
+    end
+  end
+
+  class SerializerNotFound < HyperdriveError
+    def initialize(serializer_name)
+      super("Couldn't find a serializer called " + serializer_name, 500)
     end
   end
 

@@ -28,9 +28,8 @@ class UsersController < ApplicationController
 
   private def serialize_authenticated_user
     token = issue_token({ user_id: @user.id })
-    user_serializer = UserSerializer.new(user: @user)
-    user_serializer.serialize_with_token_as_json(token)
-    # user_serializer.serialize(authorization: token, json: true)
+    user_serializer = UserSerializer.new(object: @user)
+    user_serializer.serialize(authorization: token, json: true)
   end
 
 end

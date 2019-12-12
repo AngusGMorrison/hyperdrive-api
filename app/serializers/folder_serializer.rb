@@ -8,7 +8,7 @@ class FolderSerializer < Serializer
     { 
       folder: {
         id: @object.id,
-        type: FILE_TYPES.folder,
+        type: FILE_TYPES[:folder],
         name: @object.name,
         level: @object.level,
         parent_folders: @object.parent_folder ? serialize_parent_folders(@object.parent_folder, []) : [],

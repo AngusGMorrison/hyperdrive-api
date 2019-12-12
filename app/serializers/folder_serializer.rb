@@ -17,7 +17,7 @@ class FolderSerializer < Serializer
         created_at: DateFormatter.format_date(@object.created_at),
         updated_at: DateFormatter.format_date(@object.updated_at)
       }
-  }
+    }.merge(get_serialized_documents)
   end
 
   private def serialize_parent_folders(parent, array)
@@ -41,7 +41,7 @@ class FolderSerializer < Serializer
   end
 
   private def get_serialized_documents
-    doc_serializer = DocumentSerializer.new(documents: @object.documents)
+    doc_serializer = DocumentSerializer.new(object: @object.documents)
     serialized_documents = doc_serializer.serialize()
     serialized_documents[:documents]
   end

@@ -50,7 +50,7 @@ class User < ApplicationRecord
     class_name = model_name.to_s.classify.constantize
     class_name.find_by!(id: id, user: self)
   rescue ActiveRecord::RecordNotFound
-    raise NotFound(class_name)
+    raise OwnedObjectNotFound(class_name)
   end
 
 end

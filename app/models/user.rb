@@ -19,7 +19,7 @@ class User < ApplicationRecord
   validates :name, {
     format: {
       with: Validation::RegExps::NAME,
-      message: Validation::Messages::NAME
+      message: Validation::Messages::USER[:name]
     }
   }
 
@@ -29,14 +29,14 @@ class User < ApplicationRecord
     },
     format: {
       with: URI::MailTo::EMAIL_REGEXP,
-      message: Validation::Messages::EMAIL
+      message: Validation::Messages::USER[:email]
     }
   }
 
   validates :password, {
     format: {
       with: Validation::RegExps::PASSWORD,
-      message: Validation::Messages::PASSWORD
+      message: Validation::Messages::USER[:password]
     }
   }
 
@@ -52,5 +52,4 @@ class User < ApplicationRecord
   rescue ActiveRecord::RecordNotFound
     raise OwnedObjectNotFound(class_name)
   end
-
 end

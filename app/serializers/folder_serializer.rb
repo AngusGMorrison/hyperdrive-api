@@ -4,7 +4,7 @@ class FolderSerializer < Serializer
     super(object: object)
   end
 
-  def get_serialized_object
+  private def get_serialized_object
     { 
       folder: {
         id: @object.id,

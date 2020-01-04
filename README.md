@@ -4,8 +4,6 @@
 
 The critical cyberpunk cloud storage drive you never knew you needed.
 
-*This project is a work in progress. Check back soon to try it live on AWS Elastic Beanstalk.*
-
 **Features:**
 * Accepts file uploads for storage in a folder-and-document filesystem private to each user
 * Token-based user authentication
